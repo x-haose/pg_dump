@@ -1,0 +1,53 @@
+version: '3'
+services:
+  rabbit:
+    container_name: rabbitmq
+    image: haose/rabbitmq_stomp
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=adminadmin5200.
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15674:15674"
+      - "61613:61613"
+  app:
+    container_name: server
+    build: .
+    working_dir: "/project"
+    command: ["python", "-m", "server.app" ]
+    environment:
+      - PYTHONPATH=/project/pkgs
+    volumes:
+      - ./server:/project/server
+      - ./client:/project/client
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rabbit
+
+  celery:
+    container_name: celery
+    build: .
+    working_dir: "/project"
+    command: ["celery", "-A", "server.tasks.app", "worker", "--loglevel=INFO"]
+    environment:
+      - PYTHONPATH=/project/pkgs
+    volumes:
+      - ./server:/project/server
+    depends_on:
+      - rabbit
+
+  flower:
+    container_name: celery
+    build: .
+    working_dir: "/project"
+    command: ["celery", "-A", "server.tasks.app", "flower", "--port=5566"]
+    environment:
+      - PYTHONPATH=/project/pkgs
+    volumes:
+      - ./server:/project/server
+    ports:
+      - "5566:5566"
+    depends_on:
+      - rabbit

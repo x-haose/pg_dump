@@ -1,0 +1,42 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    { name = "昊色居士", email = "xhrtxh@gmail" },
+]
+dependencies = [
+    "sh>=1.14.3",
+    "sanic>=22.9.1",
+    "loguru>=0.6.0",
+    "pydantic>=1.10.2",
+    "stomp.py>=8.1.0",
+    "celery[amqp]>=5.2.7",
+    "flower>=1.2.0",
+]
+requires-python = ">=3.10"
+license = { text = "MIT" }
+[project.optional-dependencies]
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
+
+[tool]
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.pdm]
+
+[[tool.pdm.source]]
+name = "pypi"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+verify_ssl = true
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "black[d]>=22.12.0",
+    "isort>=5.11.2",
+]

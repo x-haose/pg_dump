@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/papercss/dist/paper.min.css">
+    <link rel="shortcut icon" href="https://ci.phncdn.com/www-static/favicon.ico"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.0.0/bundles/stomp.umd.min.js"></script>
+    <script src="https://unpkg.zhimg.com/axios@0.27.2/dist/axios.min.js"></script>
+    <title>免费色情视频及性爱影片 – A片，X级，色情片分享网站 &#124; Pornhub</title>
+</head>
+
+<body>
+<div class="paper container">
+    <h1>DUMP DB</h1>
+    <div class="form-group">
+        <label for="remoteTmpSelects">远程数据库</label>
+        <select id="remoteTmpSelects" onchange="change_remote_tmp()">
+            <option value="test">测试服</option>
+            <option value="re">RE</option>
+            <option value="custom">自定义</option>
+        </select>
+    </div>
+    <div class="row">
+        <div class="col sm-8">
+            <div class="form-group">
+                <label for="remoteIpInput">IP</label>
+                <input class="input-block" type="text" id="remoteIpInput">
+            </div>
+        </div>
+        <div class="col sm-4">
+            <div class="form-group">
+                <label for="remotePortInput">端口</label>
+                <input class="input-block" type="text" id="remotePortInput">
+            </div>
+        </div>
+        <div class="col sm-4">
+            <div class="form-group">
+                <label for="remoteUsernameInput">用户名</label>
+                <input class="input-block" type="text" id="remoteUsernameInput">
+            </div>
+        </div>
+        <div class="col sm-4">
+            <div class="form-group">
+                <label for="remotePasswdInput">密码</label>
+                <input class="input-block" type="password" id="remotePasswdInput">
+            </div>
+        </div>
+        <div class="col sm-4">
+            <div class="form-group">
+                <label for="remoteDBNameInput">数据库</label>
+                <input class="input-block" type="text" id="remoteDBNameInput">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="targetTmpSelects">目标数据库</label>
+        <select id="targetTmpSelects">
+            <option value="custom">自定义</option>
+        </select>
+    </div>
+    <div class="row">
+        <div class="col sm-8">
+            <div class="form-group">
+                <label for="targetIpInput">IP</label>
+                <input class="input-block" type="text" id="targetIpInput" value="192.168.102.75">
+            </div>
+        </div>
+        <div class="col sm-4">
+            <div class="form-group">
+                <label for="targetPortInput">端口</label>
+                <input class="input-block" type="text" id="targetPortInput" value="5432">
+            </div>
+        </div>
+        <div class="col sm-4">
+            <div class="form-group">
+                <label for="targetUsernameInput">用户名</label>
+                <input class="input-block" type="text" id="targetUsernameInput" value="postgres">
+            </div>
+        </div>
+        <div class="col sm-4">
+            <div class="form-group">
+                <label for="targetPasswdInput">密码</label>
+                <input class="input-block" type="password" id="targetPasswdInput" value="123456">
+            </div>
+        </div>
+        <div class="col sm-4">
+            <div class="form-group">
+                <label for="targetDBNameInput">数据库</label>
+                <input class="input-block" type="text" id="targetDBNameInput" value="sale">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button class="btn-block" onclick="dump()">导出</button>
+    </div>
+    <article class="article">
+        <p class="article-meta">执行日志！</p>
+        <pre><code id="log" style="height:300px;overflow-y:auto"> </code></pre>
+    </article>
+</div>
+
+
+<script>
+    let remote_tmp = $('#remoteTmpSelects')
+    let remote_ip = $('#remoteIpInput')
+    let remote_port = $('#remotePortInput')
+    let remote_user = $('#remoteUsernameInput')
+    let remote_passwd = $('#remotePasswdInput')
+    let remote_db = $('#remoteDBNameInput')
+
+    let target_tmp = $('#targetTmpSelects')
+    let target_ip = $('#targetIpInput')
+    let target_port = $('#targetPortInput')
+    let target_user = $('#targetUsernameInput')
+    let target_passwd = $('#targetPasswdInput')
+    let target_db = $('#targetDBNameInput')
+    let log_code = $("#log")
+    let logs = []
+
+    function change_remote_tmp(e) {
+        switch (remote_tmp.val()) {
+            case 'test':
+                remote_ip.val("192.168.100.64")
+                remote_port.val("5432")
+                remote_user.val("odoo")
+                remote_passwd.val("Holder123")
+                remote_db.val("sale")
+                break
+            case 're':
+                remote_ip.val("192.168.100.64")
+                remote_port.val("15432")
+                remote_user.val("odoo")
+                remote_passwd.val("Holder123")
+                remote_db.val("sale")
+                break
+        }
+    }
+
+    function add_logs(log) {
+        if (logs.length >= 200) {
+            logs.shift()
+        }
+        logs.push(log)
+        log_code.text(logs.join('\n'))
+    }
+
+    change_remote_tmp()
+</script>
+
+
+<script>
+    let routing_key = Math.random().toString(36).slice(-6);
+    const client = new StompJs.Client({
+        brokerURL: 'ws://192.168.102.75:15674/ws',
+        connectHeaders: {
+            login: 'admin',
+            passcode: 'adminadmin5200.',
+        },
+        debug: function (str) {
+            console.log(str);
+        },
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+    });
+    client.onConnect = frame => {
+        client.subscribe(`/queue/dump_${routing_key}`, msg => {
+            add_logs(msg.body)
+            log_code.scrollTop(log_code[0].scrollHeight)
+        })
+    };
+    client.onStompError = frame => {
+        console.log('Broker reported error: ' + frame.headers['message']);
+        console.log('Additional details: ' + frame.body);
+    };
+    client.activate();
+
+
+    function dump() {
+        let remote = {
+            host: remote_ip.val(),
+            port: remote_port.val(),
+            user: remote_user.val(),
+            passwd: remote_passwd.val(),
+            db: remote_db.val(),
+        }
+        let target = {
+            host: target_ip.val(),
+            port: target_port.val(),
+            user: target_user.val(),
+            passwd: target_passwd.val(),
+            db: target_db.val(),
+        }
+        let data = {
+            "remote": remote,
+            "target": target,
+            "routing_key": routing_key
+        }
+        axios.post('/dump', data)
+        log_code.text('')
+    }
+</script>
+</body>
+
+</html>
