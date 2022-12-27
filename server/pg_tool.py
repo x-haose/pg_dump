@@ -52,31 +52,37 @@ class PostgresTool(object):
         """
         # noinspection SqlDialectInspection,SqlNoDataSourceInspection
         sql = f"SELECT u.datname FROM pg_catalog.pg_database u where u.datname='{self.connect_data.db}';"
-        result = self.execute_sql(sql)
+        result = self.execute_sql(sql, use_db=False)
         return self.connect_data.db in result.stdout.decode()
 
-    def execute_sql(self, sql, **kwargs):
+    def execute_sql(self, sql, use_db=True, **kwargs):
         """
         执行sql
         Args:
-            sql:
+            sql: 要执行的sql
+            use_db: 是否使用数据库执行
             **kwargs:
 
         Returns:
 
         """
-        args = (
+        args = [
             "-h",
             self.connect_data.host,
             "-p",
             self.connect_data.port,
             "-U",
             self.connect_data.user,
-            "-d",
-            self.connect_data.db,
             "-c",
             sql,
-        )
+        ]
+        if use_db:
+            args.extend(
+                [
+                    "-d",
+                    self.connect_data.db,
+                ]
+            )
         pg_sh = sh.Command("psql")
         kwargs["_in"] = self.connect_data.passwd
         return pg_sh(*args, **kwargs)
@@ -136,7 +142,7 @@ class PostgresTool(object):
             "-W",
             "-Fc",
             "-j",
-            6,
+            "$(nproc)",
             filename,
         )
         pg_sh = sh.Command("pg_restore")
