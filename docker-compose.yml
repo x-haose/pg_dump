@@ -15,9 +15,7 @@ services:
     container_name: server
     build: .
     working_dir: "/project"
-    command: ["python", "-m", "server.app" ]
-    environment:
-      - PYTHONPATH=/project/pkgs
+    command: ["pdm", "run", "python", "-m", "server.app" ]
     volumes:
       - ./server:/project/server
       - ./client:/project/client
@@ -30,24 +28,21 @@ services:
     container_name: celery
     build: .
     working_dir: "/project"
-    command: ["celery", "-A", "server.tasks.app", "worker", "--loglevel=INFO"]
-    environment:
-      - PYTHONPATH=/project/pkgs
+    command: ["pdm", "run", "celery", "-A", "server.tasks.app", "worker", "--loglevel=INFO"]
     volumes:
       - ./server:/project/server
     depends_on:
       - rabbit
 
   flower:
-    container_name: celery
+    container_name: flower
     build: .
     working_dir: "/project"
-    command: ["celery", "-A", "server.tasks.app", "flower", "--port=5566"]
-    environment:
-      - PYTHONPATH=/project/pkgs
+    command: ["pdm", "run", "celery", "-A", "server.tasks.app", "flower", "--port=5566"]
     volumes:
       - ./server:/project/server
     ports:
       - "5566:5566"
     depends_on:
       - rabbit
+      - celery

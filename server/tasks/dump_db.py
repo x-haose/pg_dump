@@ -23,7 +23,7 @@ def dump(req_data: dict):
     data = DumpDataMsg(**req_data)
 
     try:
-        stomp_conn = stomp.Connection(host_and_ports=[("127.0.0.1", 61613)])
+        stomp_conn = stomp.Connection(host_and_ports=[("rabbit", 61613)])
         stomp_conn.connect("admin", "adminadmin5200.", wait=True)
     except Exception as e:
         logger.error(f"连接stomp失败：{e}", name="tasks")
