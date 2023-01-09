@@ -128,6 +128,7 @@ class PostgresTool(object):
         Returns:
 
         """
+        jobs = sh.Command("nproc")()
         args = (
             "-h",
             self.connect_data.host,
@@ -142,7 +143,7 @@ class PostgresTool(object):
             "-W",
             "-Fc",
             "-j",
-            "$(nproc)",
+            jobs,
             filename,
         )
         pg_sh = sh.Command("pg_restore")
@@ -150,7 +151,7 @@ class PostgresTool(object):
         return pg_sh(*args, **kwargs)
 
 
-def main():
+def test():
     connect_data = PostgresConnectData(
         host="127.0.0.1", port="5432", user="postgres", passwd="123456", db="sale"
     )
@@ -172,4 +173,4 @@ def main():
 
 if __name__ == "__main__":
     tool_logger = get_log("pg_tool")
-    main()
+    test()
