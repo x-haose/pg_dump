@@ -128,7 +128,7 @@ class PostgresTool(object):
         Returns:
 
         """
-        jobs = sh.Command("nproc")()
+        jobs = int(sh.Command("nproc")())
         args = (
             "-h",
             self.connect_data.host,
