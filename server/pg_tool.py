@@ -73,16 +73,11 @@ class PostgresTool(object):
             self.connect_data.port,
             "-U",
             self.connect_data.user,
+            "-d",
+            self.connect_data.db if use_db else "postgres",
             "-c",
             sql,
         ]
-        if use_db:
-            args.extend(
-                [
-                    "-d",
-                    self.connect_data.db,
-                ]
-            )
         pg_sh = sh.Command("psql")
         kwargs["_in"] = self.connect_data.passwd
         return pg_sh(*args, **kwargs)
