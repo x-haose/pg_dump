@@ -160,8 +160,6 @@ RUN pip install -U pip setuptools wheel pdm -i https://pypi.tuna.tsinghua.edu.cn
 
 # copy files
 COPY pyproject.toml pdm.lock /project/
-COPY server/ /project/server
-COPY client/ /project/client
 
 # install dependencies and project into the local packages directory
 WORKDIR /project
