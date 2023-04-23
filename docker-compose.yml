@@ -12,7 +12,7 @@ services:
       - "15674:15674"
       - "61613:61613"
   app:
-    container_name: server
+    container_name: pg_dump_server
     build: .
     working_dir: "/project"
     command: ["pdm", "run", "python", "-m", "server.app" ]
